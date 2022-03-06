@@ -21,9 +21,6 @@ BLACK = 0, 0, 0
 # Class definition
 class Window():
     def __init__(self, width: int, height: int) -> None:
-        assert(isinstance(width, int))
-        assert(isinstance(height, int))
-
         pygame.init()
 
         self.width = width
