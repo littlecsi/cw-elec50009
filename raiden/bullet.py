@@ -15,12 +15,6 @@ WHITE = 255, 255, 255
 
 # Class definition
 class Bullet(pygame.sprite.Sprite):
-    """
-    This is the mother class of the bullet objects.
-    Param:
-        size: pixel dimension of the enemy object.
-        coordinate: saves the current location inside the game.
-    """
     def __init__(self, coordinate) -> None:
         pygame.sprite.Sprite.__init__(self)
 
