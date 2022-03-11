@@ -9,20 +9,17 @@ examples.
 # Imports
 import pygame
 
-# Global Constants
-BLACK = 0, 0, 0
-WHITE = 255, 255, 255
-
 # Class definition
 class Bullet(pygame.sprite.Sprite):
+    WHITE = 255, 255, 255
     def __init__(self, coordinate) -> None:
         pygame.sprite.Sprite.__init__(self)
 
-        self.color = WHITE
+        self.color = self.WHITE
         self.width = 5
         self.height = 5
         self.coordinate = coordinate
-        self.speed = 2
+        self.speed = 10
         self.damage = 20 
 
         self.image = pygame.Surface([self.width, self.height])
@@ -31,14 +28,15 @@ class Bullet(pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.coordinate[0], self.coordinate[1], self.width, self.height)
     
     def update(self) -> None:
-        self.coordinate = (self.coordinate[0], self.coordinate[1]-5)
+        self.coordinate = (self.coordinate[0], self.coordinate[1]-self.speed)
         self.rect = pygame.Rect(self.coordinate, (self.width, self.height))
-        return super().update()
-
+        
 def main():
     print("----------------------------------------")
     print("bullet.py file")
     print("----------------------------------------")
+    BLACK = 0, 0, 0
+        
     pygame.init()
     clock = pygame.time.Clock()
     fps = 60

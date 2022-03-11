@@ -46,38 +46,29 @@ class Laser:
         return self.ship_img.get_height()
 
 class Player(plane.Plane):
-    def __init__(self, width, height, color, coordinate, health=100):
-        super().__init__(width, height, color, coordinate, health)
-        self.lives = 5
-        self.speed = 5
-
+    lives = 5
+    speed = 5
+    def __init__(self, width, height, color, coordinate):
+        super().__init__(width, height, color, coordinate)
         self.image = pygame.Surface([self.width, self.height])
         self.image.fill(self.color)
 
         self.rect = pygame.Rect(self.coordinate[0], self.coordinate[1], self.width, self.height)
     
     def update(self, dir) -> None:
-        if dir == "N": 
+        if dir == 'N': 
             self.coordinate = (self.coordinate[0], self.coordinate[1]-self.speed)
-        elif dir == "S": 
+        elif dir == 'S': 
             self.coordinate = (self.coordinate[0], self.coordinate[1]+self.speed)
-        elif dir == "W": 
+        elif dir == 'W': 
             self.coordinate = (self.coordinate[0]-self.speed, self.coordinate[1])
-        elif dir == "E": 
+        elif dir == 'E': 
             self.coordinate = (self.coordinate[0]+self.speed, self.coordinate[1])
         self.rect = pygame.Rect(self.coordinate, (self.width, self.height))
-        
-        return super().update()
     
     def shoot(self, bullets) -> pygame.sprite.Group:
         bullets.add(bullet.Bullet((self.coordinate[0]+self.width/2, self.coordinate[1]-15)))
         return bullets
-                        
-def collide(obj1, obj2):
-    offset_x = obj2.x - obj1.x
-    offset_y = obj2.y - obj1.y
-    return obj1.mask.overlap(obj2, (offset_x, offset_y)) != None
- 
 
 def main():
     BLACK = 0, 0, 0
@@ -94,7 +85,7 @@ def main():
     players = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
 
-    VELOCITY_PLANE = 5 
+    VELOCITY_PLANE = 5
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Raiden")
@@ -118,7 +109,6 @@ def main():
             player1.update('E')
         if keys_pressed[pygame.K_SPACE]:
             player1.shoot(bullets)
-            pass
 
         screen.fill(BLACK)
 
