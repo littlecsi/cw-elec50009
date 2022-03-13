@@ -55,10 +55,14 @@ def main():
         
         count += 1
         if count>=FPS:
-            choice = random.choices(["easy", "normal"], weights=[5,1], k=1)[0]
+            choice = random.choices(["easy", "normal"], weights=[4,1], k=1)[0]
             rand_coord = (random.randint(int(WIDTH/4), int(WIDTH*3/4)-50), 20)
             enemies = enemy.generate_enemy(choice=choice, coordinate=rand_coord, enemies=enemies)
-            count = 0        
+            count = 0
+
+        for bul in bullets:
+            collided_sprite_list = pygame.sprite.spritecollide(bul, enemies, False)
+            for sprite in collided_sprite_list: sprite.kill()
 
         screen.fill(BLACK)
 

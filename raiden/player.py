@@ -47,7 +47,7 @@ class Laser:
 
 class Player(plane.Plane):
     lives = 5
-    speed = 5
+    speed = 7
     def __init__(self, width, height, color, coordinate):
         super().__init__(width, height, color, coordinate)
         self.image = pygame.Surface([self.width, self.height])
