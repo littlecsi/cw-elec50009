@@ -1,5 +1,5 @@
 # Import Libraries
-from turtle import width
+from turtle import left, width
 import pygame
 import random
 import sys
@@ -9,6 +9,7 @@ import enemy
 
 # Global Constants
 BLACK = 0, 0, 0
+WHITE = 255, 255, 255
 RED = 255, 0, 0
 
 WIDTH, HEIGHT = 640, 480
@@ -54,10 +55,23 @@ def main():
             count = 0
 
         for bul in bullets:
-            collided_sprite_list = pygame.sprite.spritecollide(bul, enemies, False)
-            for sprite in collided_sprite_list: sprite.kill()
+            pygame.sprite.spritecollide(bul, enemies, True)
 
+        for usr in users:
+            if pygame.sprite.spritecollide(usr, enemies, True):
+                usr.lives -= 1
+
+        # Drawing on the board
         screen.fill(BLACK)
+
+        pygame.draw.line(screen, WHITE, (160, 0), (160, 480), 5)
+        pygame.draw.line(screen, WHITE, (480, 0), (480, 480), 5)
+
+        for usr in users:
+            offset = 0
+            for _ in range(usr.lives):
+                pygame.draw.circle(screen, usr.color, (15+offset,15), 5)
+                offset += 15
 
         users.draw(screen)
         enemies.draw(screen)
@@ -66,6 +80,7 @@ def main():
         bullets.update()
         enemies.update()
 
+        pygame.display.flip()
         pygame.display.update()
 
         clock.tick(FPS)
