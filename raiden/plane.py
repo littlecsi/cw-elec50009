@@ -7,8 +7,3 @@ class Plane(pygame.sprite.Sprite):
         self.height = height
         self.color = color
         self.coordinate = coordinate
-    
-    # def draw(self, window):
-    #     window.blit(self.ship_img, (self.x, self.y))
-    #     for laser in self.lasers:
-    #         laser.draw(window)

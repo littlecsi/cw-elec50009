@@ -1,10 +1,3 @@
-"""imports all sub-modules to execute the raiden game.
-
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
-"""
 # Import Libraries
 from turtle import width
 import pygame
