@@ -1,38 +1,34 @@
-import pygame
-from network import Network
-from player import Player
-from enemy import Enemy
+import socket
 
-BLACK = 0,0,0
+class Client:
+    def __init__(self, server="54.159.72.106", port=12000) -> None:
+        self.server = server
+        self.port = port
+        
+        # Create a TCP client socket
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+        # Set up a TCP connection with the server
+        # connection_socket will be assigned to this client on the server side
+        self.client_socket.connect((self.server, self.port))
 
-width = 640
-height = 480
-win = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Raiden Client")
+    def send_msg(self, data) -> str:
+        # Send the message to the TCP server
+        self.client_socket.send(data.encode())
+        # Return values from the server
+        msg = self.client_socket.recv(1024)
 
-def redrawWindow(win,player, player2):
-    win.fill(BLACK)
-    player.draw(win)
-    player2.draw(win)
-    pygame.display.update()
+        return msg.decode()
+
+    def close_client(self) -> None:
+        self.client_socket.close()
+        return None
 
 def main():
-    run = True
-    n = Network()
-    p = n.getP()
-    clock = pygame.time.Clock()
-
-    while run:
-        clock.tick(60)
-        p2 = n.send(p)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-
-        p.move()
-        redrawWindow(win, p, p2)
-
-main()
+    client = Client()
+    while True:
+        msg = input("msg: ")
+        client.send_msg(msg)
+        
+if __name__ == "__main__":
+    main()

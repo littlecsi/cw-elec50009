@@ -1,54 +1,44 @@
+from multiprocessing import connection
 import socket
-from _thread import*
-from player import Player
-import pickle
 
-server = "146.169.168.232"
-port = 5555
+class Server:
+    def __init__(self, server="0.0.0.0", port=12000) -> None:
+        self.server = server
+        self.port = port
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Create a welcome socket
+        self.welcome_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-try:
-    s.bind((server, port))
-except socket.error as e:
-    str(e)
+        # Bind the server to the localhost
+        self.welcome_socket.bind((self.server, self.port))
+        self.welcome_socket.listen(1)
 
-s.listen(2)
-print("Waiting for a connection, Server Started")
+        # Ready message
+        print("Server running on port ", self.port)
 
-players = [Player(50,50,(255,0,0),(0,0)), Player(50,50,(0,0,255),(100,100))]
+        # Main server loop
+        while True:
+            connection_socket, caddr = self.welcome_socket.accept()
 
-def threaded_client(conn, player):
-    conn.send(pickle.dumps(players[player]))
-    reply = ""
-    while True:
-        try:
-            data = pickle.loads(conn.recv(2048))
-            players[player] = data
+            # Notice recv and send instead of recvto and sendto
+            cmsg = connection_socket.recv(1024)
+            cmsg = cmsg.decode()
 
-            if not data:
-                print("Disconnected")
-                break
-            else:
-                if player == 1:
-                    reply = players[0]
-                else:
-                    reply = players[1]
+            self.print_msg(cmsg)
 
-                print("Received: ", data)
-                print("Sending : ", reply)
+            # if(cmsg.isalnum() == False): 
+            #     cmsg = "Not alphanumeric."; 
+            # else: 
+            #     cmsg = "Alphanumeric"; 
+            # connection_socket.send(cmsg.encode())
 
-            conn.sendall(pickle.dumps(reply))
-        except:
-            break
-        
-    print("Lost connection")
-    conn.close()
+    def print_msg(self, msg) -> None:
+        print(msg)
+        return None
 
-currentPlayer = 0
-while True:
-        conn, addr = s.accept()
-        print("Connected to:", addr)
+def main():
+    server = Server()
 
-        start_new_thread(threaded_client, (conn, currentPlayer))
-        currentPlayer += 1
+
+if __name__ == '__main__':
+    main()
