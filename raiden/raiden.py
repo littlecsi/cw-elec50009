@@ -1,11 +1,11 @@
 # Import Libraries
-from turtle import left, width
 import pygame
 import random
 import sys
 
 import player
 import enemy
+import client
 
 # Global Constants
 BLACK = 0, 0, 0
@@ -26,8 +26,9 @@ def main():
     enemies = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
 
-    user = player.Player(20, 25, RED, (280, 420))
-    users.add(user)
+    aws_client = client.Client()
+
+    users.add(player.Player(20, 25, RED, (280, 420)))
 
     count = FPS
 
