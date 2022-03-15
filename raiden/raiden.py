@@ -22,13 +22,14 @@ def main():
     size = WIDTH, HEIGHT
     screen = pygame.display.set_mode(size)
 
-    users = pygame.sprite.Group()
+    players = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
 
     aws_client = client.Client()
 
-    users.add(player.Player(20, 25, RED, (280, 420)))
+    player1 = player.Player(20, 25, RED, (280, 420))
+    players.add(player1)
 
     count = FPS
 
@@ -37,17 +38,22 @@ def main():
             if event.type == pygame.QUIT: sys.exit()
         
         key = pygame.key.get_pressed()
-        if key[pygame.K_UP] and user.coordinate[1] - player.Player.speed > 50: #UP
-            user.update('N')
-        if key[pygame.K_DOWN] and user.coordinate[1] + player.Player.speed + user.height < HEIGHT: #DOWN
-            user.update('S')
-        if key[pygame.K_LEFT] and user.coordinate[0] - player.Player.speed > WIDTH*(1/4): #LEFT
-            user.update('W')
-        if key[pygame.K_RIGHT] and user.coordinate[0] + player.Player.speed + user.width < WIDTH*(3/4): #RIGHT
-            user.update('E')
+        if key[pygame.K_UP] and player1.coordinate[1] - player.Player.speed > 50: #UP
+            player1.update('N')
+            aws_client.send_msg('N')
+        if key[pygame.K_DOWN] and player1.coordinate[1] + player.Player.speed + player1.height < HEIGHT: #DOWN
+            player1.update('S')
+            aws_client.send_msg('S')
+        if key[pygame.K_LEFT] and player1.coordinate[0] - player.Player.speed > WIDTH*(1/4): #LEFT
+            player1.update('W')
+            aws_client.send_msg('W')
+        if key[pygame.K_RIGHT] and player1.coordinate[0] + player.Player.speed + player1.width < WIDTH*(3/4): #RIGHT
+            player1.update('E')
+            aws_client.send_msg('E')
         if key[pygame.K_SPACE]:
-            user.shoot(bullets)
-        
+            player1.shoot(bullets)
+            aws_client.send_msg('shoot')
+
         count += 1
         if count>=FPS:
             choice = random.choices(["easy", "normal"], weights=[4,1], k=1)[0]
@@ -58,9 +64,9 @@ def main():
         for bul in bullets:
             pygame.sprite.spritecollide(bul, enemies, True)
 
-        for usr in users:
-            if pygame.sprite.spritecollide(usr, enemies, True):
-                usr.lives -= 1
+        for user in players:
+            if pygame.sprite.spritecollide(user, enemies, True):
+                user.lives -= 1
 
         # Drawing on the board
         screen.fill(BLACK)
@@ -68,13 +74,13 @@ def main():
         pygame.draw.line(screen, WHITE, (160, 0), (160, 480), 5)
         pygame.draw.line(screen, WHITE, (480, 0), (480, 480), 5)
 
-        for usr in users:
+        for user in players:
             offset = 0
-            for _ in range(usr.lives):
-                pygame.draw.circle(screen, usr.color, (15+offset,15), 5)
+            for _ in range(user.lives):
+                pygame.draw.circle(screen, user.color, (15+offset,15), 5)
                 offset += 15
 
-        users.draw(screen)
+        players.draw(screen)
         enemies.draw(screen)
         bullets.draw(screen)
 

@@ -11,6 +11,7 @@ class Client:
         # Set up a TCP connection with the server
         # connection_socket will be assigned to this client on the server side
         self.client_socket.connect((self.server, self.port))
+        print("Connected to Server!")
 
     def send_msg(self, data) -> str:
         # Send the message to the TCP server
@@ -23,12 +24,3 @@ class Client:
     def close_client(self) -> None:
         self.client_socket.close()
         return None
-
-def main():
-    client = Client()
-    while True:
-        msg = input("msg: ")
-        client.send_msg(msg)
-        
-if __name__ == "__main__":
-    main()
