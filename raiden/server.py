@@ -1,3 +1,4 @@
+from multiprocessing import connection
 import socket
 
 class Server:
@@ -17,14 +18,14 @@ class Server:
 
         # Main server loop
         while True:
-            connection_socket, caddr = self.welcome_socket.accept()
+            self.connection_socket, caddr = self.welcome_socket.accept()
 
-            # Notice recv and send instead of recvto and sendto
-            cmsg = connection_socket.recv(1024)
-            cmsg = cmsg.decode()
+            self.cmsg = self.connection_socket.recv(1024)
+            self.cmsg = self.cmsg.decode()
+            print("Before sending")
 
-            self.print_msg(cmsg)
-
+            self.connection_socket.send(self.cmsg.encode())
+            print("After sending back")
             # if(cmsg.isalnum() == False): 
             #     cmsg = "Not alphanumeric."; 
             # else: 

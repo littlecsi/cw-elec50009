@@ -18,7 +18,7 @@ class Client:
         self.client_socket.send(data.encode())
         # Return values from the server
         msg = self.client_socket.recv(1024)
-
+        
         return msg.decode()
 
     def close_client(self) -> None:
