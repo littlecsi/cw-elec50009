@@ -26,7 +26,12 @@ def main():
     enemies = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
 
-    aws_client = client.Client()
+    aws_client = client.Client(client_port=13000)
+    print("CONNECTED TO SERVER!")
+    aws_client.send_client_detail()
+    aws_client.receive()
+
+    print("CHECKPOINT")
 
     player1 = player.Player(20, 25, RED, (280, 420))
     players.add(player1)

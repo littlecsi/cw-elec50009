@@ -2,52 +2,49 @@ from multiprocessing import connection
 import socket
 
 class Server:
-    player1_ip = ""
-    player2_ip = ""
-    def __init__(self, server="0.0.0.0", port=12000) -> None:
+    player1_address = ("", 13000)
+    player2_address = ("", 14000)
+    def __init__(self, server="", server_port=12000) -> None:
         self.server = server
-        self.port = port
+        self.server_port = server_port
 
         # Create a welcome socket
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         
         # Bind the server to the localhost
-        self.server_socket.bind((self.server, self.port))
-        self.server_socket.listen(1)
+        self.server_socket.bind((self.server, self.server_port))
 
         # Ready message
-        print("Server running on port ", self.port)
+        print("Game server running on port ", self.server_port)
 
-        self.server_conn, caddr = self.server_socket.accept()
+        # print("Waiting for Player 1")
+        # self.player1_ip = self.server_socket.recvfrom(1024)
 
-        print("Waiting for Player 1")
-        self.player1_ip = self.server_conn.recvfrom(1024)
-        self.player1_add = (self.player1_ip, 14000)
+        # print("player1 info :", self.player1_add)
 
         # print("Waiting for Player 2")
-        # self.player2_ip = self.server_conn.recvfrom(1024)
+        # self.player2_ip = self.server_socket.recvfrom(1024)
         # self.player2_add = (self.player2_ip, 15000)
 
         # Main server loop
         while True:
-            self.connection_socket, caddr = self.welcome_socket.accept()
+            cmsg, cadd = self.server_socket.recvfrom(1024)
+            print("Received :", cmsg.decode(), "from :", cadd)
 
-            self.cmsg = self.connection_socket.recv(1024)
-            self.cmsg = self.cmsg.decode()
-            print("Before sending")
+            if self.player1_address[0] == "":
+                self.player1_address = (cmsg.decode(), 13000)
+                
+                smsg = "IP address received."
+                self.respond(smsg, cadd)
 
-            self.connection_socket.send(self.cmsg.encode())
-            print("After sending back")
-            # if(cmsg.isalnum() == False): 
-            #     cmsg = "Not alphanumeric."; 
-            # else: 
-            #     cmsg = "Alphanumeric"; 
-            # connection_socket.send(cmsg.encode())
-
-    def print_msg(self, msg) -> None:
-        print(msg)
-        return None
-
+            else:
+                self.respond("HELLO", cadd)
+                pass
+            
+    def respond(self, smsg, cadd):
+        self.server_socket.sendto(smsg.encode(), cadd)
+        print("Sent : ", smsg, ", to : ", cadd)
+            
 def main():
     server = Server()
 
