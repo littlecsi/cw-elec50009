@@ -1,3 +1,4 @@
+import ipaddress
 import socket
 
 class Client:
@@ -20,6 +21,13 @@ class Client:
         msg = self.client_socket.recv(1024)
         
         return msg.decode()
+
+    def send_client_detail(self):
+        hostname = socket.gethostname()
+        ## getting the IP address using socket.gethostbyname() method
+        ip_address = socket.gethostbyname(hostname)
+        ## printing the hostname and ip_address
+        self.send_msg(ip_address)
 
     def close_client(self) -> None:
         self.client_socket.close()
