@@ -7,9 +7,10 @@ class Client:
         # Create a TCP client socket
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        self.client_socket.connect((self.server, self.server_port))
+        # self.client_socket.connect((self.server, self.server_port))
 
     def send_msg(self, data):
+        self.client_socket.connect((self.server, self.server_port))
         # Send the message to the TCP server
         self.client_socket.send(data.encode())
         print("Sent :", data)
