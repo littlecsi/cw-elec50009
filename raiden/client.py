@@ -13,6 +13,8 @@ class Client:
         # Send the message to the TCP server
         self.client_socket.send(data.encode())
         print("Sent :", data)
+        response = self.receive()
+        return response
     
     def receive(self):
         msg = self.client_socket.recv(1024)

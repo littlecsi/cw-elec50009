@@ -180,16 +180,6 @@ def main():
 
         # If game ends, leave while loop
         if player1.lives <= 0:
-            # Start sending info to database
-            aws_client.send_msg("END")
-            aws_client.receive()
-            aws_client.send_msg(player1.name)
-            aws_client.receive()
-            aws_client.send_msg(str(player1.score))
-            aws_client.receive()
-            aws_client.send_msg(str(date.today()))
-            aws_client.receive()
-            highest_score = aws_client.receive()
 
             screen.fill(BLACK)
 
@@ -198,6 +188,26 @@ def main():
             txt = "Name: " + player1.name + ", Score: " + str(player1.score)
             text = end_font.render(txt, 1, WHITE)
             screen.blit(text, (WIDTH//4, HEIGHT//2))
+
+            # Start sending info to database
+            aws_client.send_msg("END")
+            time.sleep(0.1)
+            aws_client.receive()
+            time.sleep(0.1)
+            aws_client.send_msg(player1.name)
+            time.sleep(0.1)
+            aws_client.receive()
+            time.sleep(0.1)
+            aws_client.send_msg(str(player1.score))
+            time.sleep(0.1)
+            aws_client.receive()
+            time.sleep(0.1)
+            aws_client.send_msg(str(date.today()))
+            time.sleep(0.1)
+            aws_client.receive()
+            time.sleep(0.1)
+            highest_score = aws_client.receive()
+            time.sleep(0.1)
 
             if int(highest_score) > player1.score:
                 txt = "Highest score: " + highest_score

@@ -2,7 +2,6 @@ import socket
 import awsdb as db
 
 class Server:
-    player1_address = ("146.169.190.98", 13000)
     def __init__(self, server="", server_port=12000) -> None:
         self.server = server
         self.server_port = server_port
@@ -24,8 +23,10 @@ class Server:
 
             cmsg = self.connection_socket.recv(1024)
             print("Received :", cmsg.decode())
+            self.respond("RECEIVED")
 
             if cmsg.decode() == "END":
+                print("CHECKPOINT")
                 self.connection_socket, cadd = self.server_socket.accept()
                 name = self.connection_socket.recv(1024)
                 self.respond("RECEIVED")
