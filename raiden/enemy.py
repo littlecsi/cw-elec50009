@@ -1,6 +1,5 @@
 # Imports
 import pygame
-import random
 
 import plane
 

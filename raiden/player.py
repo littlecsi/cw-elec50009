@@ -4,10 +4,10 @@ import plane
 import bullet
 
 class Player(plane.Plane):
+    name = ""
     lives = 5
     speed = 7
     score = 0
-    kill = [0, 0, 0]
     def __init__(self, width, height, color, coordinate):
         super().__init__(width, height, color, coordinate)
         self.image = pygame.Surface([self.width, self.height])
@@ -29,10 +29,3 @@ class Player(plane.Plane):
     def shoot(self, bullets) -> pygame.sprite.Group:
         bullets.add(bullet.Bullet((self.coordinate[0]+self.width/2, self.coordinate[1]-15)))
         return bullets
-
-    def get_score(self) -> int:
-        self.score += self.kill[0]*5
-        self.score += self.kill[1]*10
-        self.score += self.lives*100
-
-        return self.score
